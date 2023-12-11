@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from . models import *
 
 def loja(request):
-    context = {}
+    produtos = Produto.objects.all()
+    context = {'produtos': produtos}
     return render(request, 'loja/loja.html', context)
 
 def wishlist(request):
