@@ -1,0 +1,87 @@
+.icon-heart {
+    font-size: 42px !important;
+}
+
+#wishlist-icon {
+    position: relative;
+    display: inline-block;
+    top: 10px;
+    margin-left: 10px;
+}
+
+#total-list-items {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: smaller;
+}
+
+.box-element{
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #ffff;
+    border-radius: 4px;
+    padding: 10px;
+    width: auto;
+}
+
+.btn-add-wishlist {
+    border: 2px solid #f10e34;
+    background: #fff;
+    color: #f10e34;
+    border-radius: 30px;
+}
+
+.center-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.preco-direita{
+    float: right;
+}
+
+.btn-voltar{
+    font-size: 36px;
+    color: black;
+}
+
+.list-row{
+    display: flex;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ecececf9;
+}
+
+.row-image{
+    width: 100px;
+}
+
+.container-qtd {
+    text-align: center;
+}
+
+.quantidade {
+    display: inline-block;
+    padding-right: 10px;
+    margin-left: 50%;
+}
+
+.muda-quantidade {
+    display: block;
+    cursor: pointer;
+    color: black;
+    text-align: center;
+}
+
+.quantidade p {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}

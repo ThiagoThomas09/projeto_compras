@@ -1,0 +1,56 @@
+{% extends 'loja/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'loja' %}"><i class="fa-solid fa-arrow-left btn-voltar"></i></a>
+
+            <br>
+            <br>
+
+            <table class="table">
+                <tr>
+                    <th><h5>Itens: <strong>3</strong></h5></th>
+                    <th><h5>Total: <strong>R$ 4.500,00</strong></h5></th>
+                    <hr>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+
+        <div class="box-element">
+            <div class="list-row">
+                <div style="flex:2"></div>
+                <div style="flex:2">Item</div>
+                <div style="flex:1">Preço</div>
+                <div style="flex:1; text-align: center;">Quantidade</div>
+                <div style="flex:1; text-align: center;">Total</div>
+            </div>
+
+            <div class="list-row">
+                <div style="flex:2"><img class="row-image" src="{% static 'images/iphone_15.jpg' %}"></div>
+                <div style="flex:2">Produto 1</div>
+                <div style="flex:1">R$ 4.500,00</div>
+                <div style="flex:1">
+                    
+                    <div class="quantidade">
+                        <a class="muda-quantidade" href="{% url 'loja' %}">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </a>
+                        <p class="quantidade">1</p>
+                        <a class="muda-quantidade" href="{% url 'loja' %}">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div style="flex:1; text-align: center;">R$ 4.500,00</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
