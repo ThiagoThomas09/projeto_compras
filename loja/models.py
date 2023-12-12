@@ -34,4 +34,17 @@ class ListaDesejos(models.Model):
 
     def __str__(self):
         return self.produto.nome
+    
+    @property
+    def get_total(self):
+        total = self.produto.preco * self.quantidade
+        return total
+    
+    #usando classmethod para passar o user
+    @classmethod
+    def get_list_total(cls, user):
+        itens_lista = ListaDesejos.objects.filter(user=user)
+        valor_total = sum([item.get_total for item in itens_lista])
+        total_itens = sum([item.quantidade for item in itens_lista])
+        return valor_total, total_itens
 
