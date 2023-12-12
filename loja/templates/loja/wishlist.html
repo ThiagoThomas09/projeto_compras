@@ -23,18 +23,20 @@
 
         <div class="box-element">
             <div class="list-row">
-                <div style="flex:2"></div>
-                <div style="flex:2">Item</div>
-                <div style="flex:1">Preço</div>
+                <div style="flex:1; text-align: center">Produto</div>
+                <div style="flex:1; text-align: center">Loja</div>
+                <div style="flex:2; text-align: center">Item</div>
+                <div style="flex:1; text-align: center">Preço</div>
                 <div style="flex:1; text-align: center;">Quantidade</div>
                 <div style="flex:1; text-align: center;">Total</div>
             </div>
 
             {% for item in itens_lista %}
             <div class="list-row">
-                <div style="flex:2"><img class="row-image" src="{{ item.produto.imageURL }}"></div>
-                <div style="flex:2">{{ item.produto.nome }}</div>
-                <div style="flex:1">R$ {{ item.produto.preco|floatformat:2 }}</div>
+                <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.imageURL }}"></div>
+                <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.loja.imageURL }}"></div>
+                <div style="flex:2; text-align: center">{{ item.produto.nome }}</div>
+                <div style="flex:1; text-align: center">R$ {{ item.produto.preco|floatformat:2 }}</div>
                 <div style="flex:1">
                     
                     <div class="quantidade">

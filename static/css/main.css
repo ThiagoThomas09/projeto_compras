@@ -86,3 +86,8 @@
     padding: 0;
     text-align: center;
 }
+
+.loja-imagem {
+    float: right;
+    width: 100px;
+}

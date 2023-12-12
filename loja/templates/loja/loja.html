@@ -6,13 +6,16 @@
         <div class="col-lg-4">
             <img src="{{produto.imageURL}}" class="center-image">
             <div class="box-element produto">
+                <img src="{{ produto.loja.imageURL }}" class="loja-imagem">
                 <h6><strong>{{produto.nome}}</strong></h6>
+                
                 <hr>
                 <button class="btn-add-wishlist">
                     <i class="fa fa-heart"></i> Favoritos
                 </button>
                 <h4 class="preco-direita">R$ {{produto.preco|floatformat:2}}</h4>
             </div>
+            
         </div>
     {% endfor %}
 </div>
