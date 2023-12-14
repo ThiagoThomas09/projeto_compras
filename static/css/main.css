@@ -34,6 +34,8 @@
     background: #fff;
     color: #f10e34;
     border-radius: 30px;
+    text-decoration: none;
+    padding: 3px;
 }
 
 .center-image {

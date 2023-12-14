@@ -64,4 +64,10 @@ class ListaDesejos(models.Model):
         valor_total = sum([item.get_total for item in itens_lista])
         total_itens = sum([item.quantidade for item in itens_lista])
         return valor_total, total_itens
+    
+    @classmethod
+    def get_total_qtd(cls, user):
+        itens_lista = cls.objects.filter(user=user)
+        total_quantidade = sum(item.quantidade for item in itens_lista if item.quantidade is not None)
+        return total_quantidade
 

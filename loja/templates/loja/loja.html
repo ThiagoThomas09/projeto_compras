@@ -10,13 +10,16 @@
                 <h6><strong>{{produto.nome}}</strong></h6>
                 
                 <hr>
-                <button class="btn-add-wishlist">
+
+                <a href="{% url 'adicionar_a_lista' produto.id %}" class="btn-add-wishlist" id="favoritos-link">
                     <i class="fa fa-heart"></i> Favoritos
-                </button>
+                </a>
+                
                 <h4 class="preco-direita">R$ {{produto.preco|floatformat:2}}</h4>
             </div>
             
         </div>
     {% endfor %}
 </div>
+
 {% endblock content %}
