@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'loja.apps.LojaConfig',
     'users.apps.UsersConfig',
+    'lista_desejos.apps.ListaDesejosConfig',
 ]
 
 MIDDLEWARE = [

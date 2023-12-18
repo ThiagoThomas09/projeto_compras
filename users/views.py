@@ -3,7 +3,6 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from loja.models import Cliente
 from . forms import CustomUserCreationForm
 
 @login_required(login_url='login')
@@ -57,8 +56,6 @@ def register_user(request):
             user.username = user.username.lower()
             user.save()
 
-            # Cria um objeto cliente associado com user para funcionar a lista
-            Cliente.objects.create(user=user, nome=user.username)
             messages.success(request, 'Usuário criado!')
 
             # loga o usuário assim que finalizar o cadastro
