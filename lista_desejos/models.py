@@ -20,6 +20,7 @@ class ListaDesejos(models.Model):
     @classmethod
     def get_list_total(cls, user):
         itens_lista = ListaDesejos.objects.filter(user=user)
+        # busca instancias do modelo ListaDesejos
         valor_total = sum([item.get_total for item in itens_lista])
         total_itens = sum([item.quantidade for item in itens_lista])
         return valor_total, total_itens
@@ -27,5 +28,6 @@ class ListaDesejos(models.Model):
     @classmethod
     def get_total_qtd(cls, user):
         itens_lista = cls.objects.filter(user=user)
+        #o cls aqui é uma referencia ao ListaDesejos
         total_quantidade = sum(item.quantidade for item in itens_lista if item.quantidade is not None)
         return total_quantidade
