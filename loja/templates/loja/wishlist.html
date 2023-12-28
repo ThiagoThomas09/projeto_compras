@@ -12,7 +12,7 @@
 
             <table class="table">
                 <tr>
-                    <th><h5>Itens: <strong>{{ total_itens }}</strong></h5></th>
+                    <th><h5>Itens: <strong>{{ total_quantidade }}</strong></h5></th>
                     <th><h5>Total: <strong>R$ {{ valor_total|floatformat:2 }}</strong></h5></th>
                     <hr>
                 </tr>
@@ -20,8 +20,9 @@
         </div>
 
         <br>
-
+        {% for lista in listas %}
         <div class="box-element">
+            <h3>{{ lista.nome }}</h3>
             <div class="list-row">
                 <div style="flex:1; text-align: center">Produto</div>
                 <div style="flex:1; text-align: center">Loja</div>
@@ -31,7 +32,7 @@
                 <div style="flex:1; text-align: center;">Total</div>
             </div>
 
-            {% for item in itens_lista %}
+            {% for item in lista.itens.all %}
             <div class="list-row">
                 <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.imageURL }}"></div>
                 <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.loja.imageURL }}"></div>
@@ -54,6 +55,7 @@
             {% endfor %}
 
         </div>
+        {% endfor %}
     </div>
 </div>
 

@@ -4,11 +4,10 @@ from lista_desejos.models import ListaDesejos
 
 def loja(request):
     produtos = Produto.objects.all()
-
     total_quantidade = 0
 
     if request.user.is_authenticated:
-        total_quantidade = ListaDesejos.get_total_qtd(request.user)
+        total_quantidade = ListaDesejos.get_total_quantidade(request.user)
 
     context = {'produtos': produtos,
                'total_quantidade': total_quantidade,}
