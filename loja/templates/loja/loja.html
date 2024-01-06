@@ -10,10 +10,21 @@
                 <h6><strong>{{produto.nome}}</strong></h6>
                 
                 <hr>
-
-                <a href="{% url 'adicionar_a_lista' lista_selecionada.id produto.id %}" class="btn-add-wishlist" id="favoritos-link">
-                    <i class="fa fa-heart"></i> Favoritos
-                </a>
+                {% if user.is_authenticated %}
+                    {% if lista_selecionada %}
+                        <a href="{% url 'adicionar_a_lista' lista_selecionada.id produto.id %}" class="btn-add-wishlist" id="favoritos-link">
+                            <i class="fa fa-heart"></i> Favoritos
+                        </a>
+                    {% else %}
+                        <a href="{% url 'wishlist' %}" class="btn-add-wishlist" id="favoritos-link">
+                            <i class="fa fa-heart"></i> Favoritos
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-add-wishlist" id="favoritos-link">
+                        <i class="fa fa-heart"></i> Favoritos
+                    </a>
+                {% endif %}
                 
                 <h4 class="preco-direita">R$ {{produto.preco|floatformat:2}}</h4>
             </div>

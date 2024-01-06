@@ -5,6 +5,7 @@ from lista_desejos.models import ListaDesejos
 def loja(request):
     produtos = Produto.objects.all()
     total_quantidade = 0
+    lista_selecionada = None
 
     if request.user.is_authenticated:
         total_quantidade = ListaDesejos.get_total_quantidade(request.user)

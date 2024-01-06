@@ -3,9 +3,12 @@ from . models import ListaDesejos, ItemListaDesejos
 from loja.models import Produto
 
 def wishlist(request):
+    #redireciona o usuário se ele tentar acessar diretamente a url da lista de desejos
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
     lista_selecionada_id = request.GET.get('lista_id')
     listas = ListaDesejos.objects.filter(user=request.user)
-
 
     if lista_selecionada_id:
         lista_selecionada_id = int(lista_selecionada_id)
