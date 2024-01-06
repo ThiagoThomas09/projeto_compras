@@ -3,26 +3,37 @@ from . models import ListaDesejos, ItemListaDesejos
 from loja.models import Produto
 
 def wishlist(request):
-    listas = []
-    valor_total = 0
-    total_quantidade = 0
-    
-    if request.user.is_authenticated:
-        listas = ListaDesejos.objects.filter(user=request.user)
-        valor_total = sum(lista.get_list_total() for lista in listas)
-        total_quantidade = sum(lista.get_total_qtd() for lista in listas)
+    lista_selecionada_id = request.GET.get('lista_id')
+    listas = ListaDesejos.objects.filter(user=request.user)
 
-    context = {'listas': listas, 
-               'valor_total': valor_total,
-               'total_quantidade': total_quantidade,}
+
+    if lista_selecionada_id:
+        lista_selecionada_id = int(lista_selecionada_id)
+        lista_selecionada = get_object_or_404(ListaDesejos, id=lista_selecionada_id, user=request.user)
+    else:
+        lista_selecionada = listas.first()
+
+    itens_lista = lista_selecionada.itens.all() if lista_selecionada else []
+
+    total_quantidade = sum(item.quantidade for item in itens_lista)
+    valor_total = sum(item.get_total for item in itens_lista)
+
+    context = {
+        'listas': listas, 
+        'lista_selecionada_id':lista_selecionada_id, 
+        'lista_selecionada': lista_selecionada, 
+        'itens_lista': itens_lista,
+        'total_quantidade': total_quantidade,
+        'valor_total': valor_total,
+    }
 
     return render(request, 'loja/wishlist.html', context)
 
-def adicionar_a_lista_de_desejos(request, produto_id):
+def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
     if request.user.is_authenticated:
         produto = get_object_or_404(Produto, id=produto_id)
 
-        lista = ListaDesejos.objects.filter(user=request.user).first()
+        lista = get_object_or_404(ListaDesejos, id=lista_id, user=request.user)
         if not lista:
             lista = ListaDesejos.objects.create(user=request.user, nome = 'Minha lista de desejos')
         

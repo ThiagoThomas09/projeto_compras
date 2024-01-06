@@ -10,6 +10,16 @@
             <br>
             <br>
 
+            <form action="{% url 'wishlist' %}" method="get">
+                <select name="lista_id" onchange="this.form.submit()">
+                    {% for lista in listas %}
+                    <option value="{{ lista.id }}" {% if lista.id == lista_selecionada_id %}selected{% endif %}>
+                        {{ lista.nome }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+
             <table class="table">
                 <tr>
                     <th><h5>Itens: <strong>{{ total_quantidade }}</strong></h5></th>
@@ -20,9 +30,9 @@
         </div>
 
         <br>
-        {% for lista in listas %}
+        {% if lista_selecionada %}
         <div class="box-element">
-            <h3>{{ lista.nome }}</h3>
+            <h3>{{ lista_selecionada.nome }}</h3>
             <div class="list-row">
                 <div style="flex:1; text-align: center">Produto</div>
                 <div style="flex:1; text-align: center">Loja</div>
@@ -32,7 +42,7 @@
                 <div style="flex:1; text-align: center;">Total</div>
             </div>
 
-            {% for item in lista.itens.all %}
+            {% for item in itens_lista %}
             <div class="list-row">
                 <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.imageURL }}"></div>
                 <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.loja.imageURL }}"></div>
@@ -41,7 +51,7 @@
                 <div style="flex:1">
                     
                     <div class="quantidade">
-                        <a class="muda-quantidade" href="{% url 'adicionar_a_lista' item.produto.id %}">
+                        <a class="muda-quantidade" href="{% url 'adicionar_a_lista' lista_selecionada.id item.produto.id %}">
                             <i class="fa-solid fa-arrow-up"></i>
                         </a>
                         <p class="quantidade">{{ item.quantidade }}</p>
@@ -55,7 +65,7 @@
             {% endfor %}
 
         </div>
-        {% endfor %}
+        {% endif %}
     </div>
 </div>
 

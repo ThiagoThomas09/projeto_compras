@@ -8,7 +8,10 @@ def loja(request):
 
     if request.user.is_authenticated:
         total_quantidade = ListaDesejos.get_total_quantidade(request.user)
+        listas = ListaDesejos.objects.filter(user=request.user)
+        lista_selecionada = listas.first() if listas.exists() else None
 
     context = {'produtos': produtos,
-               'total_quantidade': total_quantidade,}
+               'total_quantidade': total_quantidade,
+               'lista_selecionada':lista_selecionada}
     return render(request, 'loja/loja.html', context)
