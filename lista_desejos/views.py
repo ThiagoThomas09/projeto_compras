@@ -7,14 +7,24 @@ def wishlist(request):
     if not request.user.is_authenticated:
         return redirect('login')
     
-    lista_selecionada_id = request.GET.get('lista_id')
+    # session para manter a ultima lista selecionada pelo usuário
+    lista_selecionada_id = request.GET.get('lista_id') or request.session.get('ultima_lista_id')
     listas = ListaDesejos.objects.filter(user=request.user)
 
     if lista_selecionada_id:
         lista_selecionada_id = int(lista_selecionada_id)
         lista_selecionada = get_object_or_404(ListaDesejos, id=lista_selecionada_id, user=request.user)
+        request.session['ultima_lista_id'] = lista_selecionada_id
     else:
-        lista_selecionada = listas.first()
+        ultima_lista_id = request.session.get('ultima_lista_id')
+
+        if ultima_lista_id:
+            lista_selecionada = get_object_or_404(ListaDesejos, id=ultima_lista_id, user=request.user)
+        else:
+            lista_selecionada = listas.first()
+    
+        listas = ListaDesejos.objects.filter(user=request.user)
+
 
     itens_lista = lista_selecionada.itens.all() if lista_selecionada else []
 

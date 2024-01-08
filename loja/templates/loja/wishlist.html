@@ -9,6 +9,7 @@
 
             <br>
             <br>
+            <p>ID da lista: {{ lista_selecionada_id }}</p>
 
             <form action="{% url 'wishlist' %}" method="get">
                 <select name="lista_id" onchange="this.form.submit()">
