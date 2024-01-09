@@ -4,11 +4,23 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from . forms import CustomUserCreationForm
-from lista_desejos.models import ListaDesejos
+from lista_desejos.models import ListaDesejos, ItemListaDesejos
+from loja.models import Produto
 
 @login_required(login_url='login')
 def profiles(request):
-    context = {}
+
+    user = request.user
+    listas = ListaDesejos.objects.filter(user=user)
+
+    lista_com_produtos = []
+    for lista in listas:
+        itens = ItemListaDesejos.objects.filter(lista=lista)
+        lista_com_produtos.append({'lista': lista, 'itens': itens})
+
+    context = {
+        'lista_com_produtos': lista_com_produtos
+    }
     return render(request, 'users/perfil.html', context)
 
 

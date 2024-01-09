@@ -2,5 +2,33 @@
 
 {% block content %}
 <h1>Perfil do usuário</h1>
+<h2>{{ user }}</h2>
+
+<hr>
+<h3>Listas do usuário</h3>
+<br>
+{% for lista_info in lista_com_produtos %}
+    <div class="box-element">
+        <h3>{{ lista_info.lista.nome }}</h3>
+        <div class="list-row">
+            <div style="flex:1; text-align: center">Produto</div>
+            <div style="flex:1; text-align: center">Loja</div>
+            <div style="flex:2; text-align: center">Item</div>
+            <div style="flex:1; text-align: center">Preço</div>
+            <div style="flex:1; text-align: center;">Quantidade</div>
+            <div style="flex:1; text-align: center;">Total</div>
+        </div>
+        {% for item in lista_info.itens %}
+        <div class="list-row">
+            <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.imageURL }}"></div>
+            <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.loja.imageURL }}"></div>
+            <div style="flex:2; text-align: center">{{ item.produto.nome }}</div>
+            <div style="flex:1; text-align: center">R$ {{ item.produto.preco|floatformat:2 }}</div>
+            <div style="flex:1; text-align: center">{{ item.quantidade }}</div>
+            <div style="flex:1; text-align: center;">R$ {{ item.get_total }}</div>
+        </div>
+        {% endfor %}
+    </div>
+{% endfor %}
 
 {% endblock content %}

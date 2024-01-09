@@ -8,6 +8,7 @@ class ItemListaDesejosInline(admin.TabularInline):
 
 class ListaDesejosAdmin(admin.ModelAdmin):
     inlines = [ItemListaDesejosInline]
+    list_display = ('nome', 'user', 'criado_em')
 
 
 admin.site.register(ListaDesejos, ListaDesejosAdmin)
