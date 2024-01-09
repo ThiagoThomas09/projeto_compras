@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from . forms import CustomUserCreationForm
+from lista_desejos.models import ListaDesejos
 
 @login_required(login_url='login')
 def profiles(request):
@@ -55,6 +56,10 @@ def register_user(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
+
+            lista_padrao = ListaDesejos.objects.create(user=user, nome='Minha Lista de Desejos')
+
+            request.session['ultima_lista_id'] = lista_padrao.id
 
             messages.success(request, 'Usuário criado!')
 
