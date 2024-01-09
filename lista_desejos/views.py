@@ -7,26 +7,24 @@ def wishlist(request):
     if not request.user.is_authenticated:
         return redirect('login')
     
-    # session para manter a ultima lista selecionada pelo usuário
-    lista_selecionada_id = request.GET.get('lista_id') or request.session.get('ultima_lista_id')
     listas = ListaDesejos.objects.filter(user=request.user)
 
-    if lista_selecionada_id:
-        lista_selecionada_id = int(lista_selecionada_id)
-        lista_selecionada = get_object_or_404(ListaDesejos, id=lista_selecionada_id, user=request.user)
-        request.session['ultima_lista_id'] = lista_selecionada_id
+    if not listas.exists():
+        lista_padrao = ListaDesejos.objects.create(user=request.user, nome='Minha Lista de Desejos')
+        lista_selecionada_id = lista_padrao.id
     else:
-        ultima_lista_id = request.session.get('ultima_lista_id')
+        # session para manter a ultima lista selecionada pelo usuário
+        lista_selecionada_id = request.GET.get('lista_id') or request.session.get('ultima_lista_id')
 
-        if ultima_lista_id:
-            lista_selecionada = get_object_or_404(ListaDesejos, id=ultima_lista_id, user=request.user)
+        if not lista_selecionada_id:
+            lista_selecionada_id = listas.first().id
         else:
-            lista_selecionada = listas.first()
-    
-        listas = ListaDesejos.objects.filter(user=request.user)
+            lista_selecionada_id = int(lista_selecionada_id)
 
+    lista_selecionada = get_object_or_404(ListaDesejos, id=lista_selecionada_id, user=request.user)
+    request.session['ultima_lista_id'] = lista_selecionada_id
 
-    itens_lista = lista_selecionada.itens.all() if lista_selecionada else []
+    itens_lista = lista_selecionada.itens.all()
 
     total_quantidade = sum(item.quantidade for item in itens_lista)
     valor_total = sum(item.get_total for item in itens_lista)
@@ -46,11 +44,25 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
     if request.user.is_authenticated:
         produto = get_object_or_404(Produto, id=produto_id)
 
-        lista = get_object_or_404(ListaDesejos, id=lista_id, user=request.user)
-        if not lista:
-            lista = ListaDesejos.objects.create(user=request.user, nome = 'Minha lista de desejos')
-        
-        item_lista, created = ItemListaDesejos.objects.get_or_create(lista=lista, produto=produto, defaults={'quantidade': 1} )
+        lista_id = request.session.get('ultima_lista_id')
+        if lista_id:
+            lista = get_object_or_404(ListaDesejos, id=lista_id, user=request.user)
+        else:
+            lista = ListaDesejos.objects.filter(user=request.user).first()
+            if lista:
+                # Salva a lista como a lista atual na sessão
+                request.session['ultima_lista_id'] = lista.id
+            else:
+                # Cria uma nova lista se o usuário não tiver nenhuma
+                lista = ListaDesejos.objects.create(user=request.user, nome='Minha Lista de Desejos')
+                request.session['ultima_lista_id'] = lista.id
+
+        # Responsável por adicionar o item na lista
+        item_lista, created = ItemListaDesejos.objects.get_or_create(
+            lista=lista, 
+            produto=produto, 
+            defaults={'quantidade': 1} 
+        )
 
         if not created:
             item_lista.quantidade += 1
