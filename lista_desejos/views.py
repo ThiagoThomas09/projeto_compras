@@ -40,6 +40,13 @@ def wishlist(request):
 
     return render(request, 'loja/wishlist.html', context)
 
+def criar_lista(request):
+    if request.method == 'POST':
+        nome_lista = request.POST.get('nome_lista')
+        if nome_lista:
+            ListaDesejos.objects.create(user=request.user, nome=nome_lista)
+        return redirect('wishlist')
+
 def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
     if request.user.is_authenticated:
         produto = get_object_or_404(Produto, id=produto_id)
