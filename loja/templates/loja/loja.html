@@ -12,13 +12,13 @@
                 <hr>
                 {% if user.is_authenticated %}
                     {% if lista_selecionada %}
-                        <a href="{% url 'adicionar_a_lista' lista_selecionada.id produto.id %}" class="btn-add-wishlist" id="favoritos-link">
+                        <a href="{% url 'adicionar_a_lista' lista_selecionada.id produto.id %}" class="btn-add-wishlist">
                             <i class="fa fa-heart"></i> Favoritos
                         </a>
                     {% else %}
-                        <a href="{% url 'wishlist' %}" class="btn-add-wishlist" id="favoritos-link">
+                        <button onclick="abrirModal('{{ produto.id }}')" class="btn-add-wishlist">
                             <i class="fa fa-heart"></i> Favoritos
-                        </a>
+                        </button>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="btn-add-wishlist" id="favoritos-link">
@@ -32,5 +32,39 @@
         </div>
     {% endfor %}
 </div>
+
+<div id="novaListaModal" style="display:none;">
+    <form action="" method="post" id="formCriarLista">
+        {% csrf_token %}
+        <label for="nome_lista">Nome da Nova Lista:</label>
+        <input type="text" id="nome_lista" name="nome_lista" required>
+
+        <input type="hidden" id="produto_id_modal" name="produto_id" value="">
+        <button type="submit">Criar Lista</button>
+    </form>
+    <button onclick="fecharModal()">Cancelar</button>
+</div>
+
+<script>
+    function abrirModal(produtoId) {
+    var formCriarLista = document.getElementById('formCriarLista');
+    var produtoIdInput = document.getElementById('produto_id_modal');
+
+    produtoIdInput.value = produtoId;
+    document.getElementById('novaListaModal').style.display = 'block';
+
+    if (produtoId) {
+        formCriarLista.action = '/criar_lista/' + produtoId + '/';
+    } else {
+        formCriarLista.action = '/criar_lista/';
+    }
+}
+
+    function fecharModal() {
+        document.getElementById('novaListaModal').style.display = 'none';
+    }
+</script>
+
+
 
 {% endblock content %}

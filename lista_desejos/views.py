@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from . models import ListaDesejos, ItemListaDesejos
 from loja.models import Produto
+from django.contrib import messages
 
 def wishlist(request):
     #redireciona o usuário se ele tentar acessar diretamente a url da lista de desejos
@@ -10,8 +11,7 @@ def wishlist(request):
     listas = ListaDesejos.objects.filter(user=request.user)
 
     if not listas.exists():
-        lista_padrao = ListaDesejos.objects.create(user=request.user, nome='Minha Lista de Desejos')
-        lista_selecionada_id = lista_padrao.id
+        return render(request, 'loja/wishlist.html', {'listas': None})
     else:
         # session para manter a ultima lista selecionada pelo usuário
         lista_selecionada_id = request.GET.get('lista_id') or request.session.get('ultima_lista_id')
@@ -23,7 +23,6 @@ def wishlist(request):
 
     lista_selecionada = get_object_or_404(ListaDesejos, id=lista_selecionada_id, user=request.user)
     request.session['ultima_lista_id'] = lista_selecionada_id
-
     itens_lista = lista_selecionada.itens.all()
 
     total_quantidade = sum(item.quantidade for item in itens_lista)
@@ -40,13 +39,20 @@ def wishlist(request):
 
     return render(request, 'loja/wishlist.html', context)
 
-def criar_lista(request):
+def criar_lista(request, produto_id=None):
+
     if request.method == 'POST':
         nome_lista = request.POST.get('nome_lista')
         if nome_lista:
-            ListaDesejos.objects.create(user=request.user, nome=nome_lista)
-        return redirect('wishlist')
+            nova_lista = ListaDesejos.objects.create(user=request.user, nome=nome_lista)
+            request.session['ultima_lista_id'] = nova_lista.id
 
+            if produto_id:
+                produto = get_object_or_404(Produto, id=produto_id)
+                ItemListaDesejos.objects.create(lista=nova_lista, produto=produto, quantidade=1)
+
+        return redirect('wishlist')
+    
 def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
     if request.user.is_authenticated:
         produto = get_object_or_404(Produto, id=produto_id)
@@ -55,13 +61,9 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
         if lista_id:
             lista = get_object_or_404(ListaDesejos, id=lista_id, user=request.user)
         else:
-            lista = ListaDesejos.objects.filter(user=request.user).first()
+            lista = ListaDesejos.objects.filter(user=request.user).order_by('-id').first()
             if lista:
                 # Salva a lista como a lista atual na sessão
-                request.session['ultima_lista_id'] = lista.id
-            else:
-                # Cria uma nova lista se o usuário não tiver nenhuma
-                lista = ListaDesejos.objects.create(user=request.user, nome='Minha Lista de Desejos')
                 request.session['ultima_lista_id'] = lista.id
 
         # Responsável por adicionar o item na lista
@@ -74,8 +76,10 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
         if not created:
             item_lista.quantidade += 1
             item_lista.save()
+        
+        messages.success(request, 'Produto adicionado à lista de desejos com sucesso!')
 
-        return redirect('wishlist')
+        return redirect('/')
 
 def remover_da_lista_de_desejos(request, item_id):
     if request.user.is_authenticated:

@@ -69,10 +69,6 @@ def register_user(request):
             user.username = user.username.lower()
             user.save()
 
-            lista_padrao = ListaDesejos.objects.create(user=user, nome='Minha Lista de Desejos')
-
-            request.session['ultima_lista_id'] = lista_padrao.id
-
             messages.success(request, 'Usuário criado!')
 
             # loga o usuário assim que finalizar o cadastro
