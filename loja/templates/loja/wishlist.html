@@ -59,7 +59,7 @@
                 <div style="flex:1">
                     
                     <div class="quantidade">
-                        <a class="muda-quantidade" href="{% url 'adicionar_a_lista' lista_selecionada.id item.produto.id %}">
+                        <a class="muda-quantidade" href="{% url 'adicionar_a_lista' lista_selecionada.id item.produto.id %}?origem=lista">
                             <i class="fa-solid fa-arrow-up"></i>
                         </a>
                         <p class="quantidade">{{ item.quantidade }}</p>

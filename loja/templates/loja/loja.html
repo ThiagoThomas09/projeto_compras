@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="row">
+    <div>Lista selecionada ID: {{ lista_selecionada.id }}</div>
     {% for produto in produtos %}
         <div class="col-lg-4">
             <img src="{{produto.imageURL}}" class="center-image">
@@ -12,13 +13,14 @@
                 <hr>
                 {% if user.is_authenticated %}
                     {% if lista_selecionada %}
-                        <a href="{% url 'adicionar_a_lista' lista_selecionada.id produto.id %}" class="btn-add-wishlist">
+                        <button onclick="verificarEAdicionarProduto('{{ lista_selecionada.id }}', '{{ produto.id }}')" class="btn-add-wishlist">
                             <i class="fa fa-heart"></i> Favoritos
-                        </a>
+                        </button>
+                    
                     {% else %}
                         <button onclick="abrirModal('{{ produto.id }}')" class="btn-add-wishlist">
                             <i class="fa fa-heart"></i> Favoritos
-                        </button>
+                        </button>                  
                     {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="btn-add-wishlist" id="favoritos-link">
@@ -33,7 +35,7 @@
     {% endfor %}
 </div>
 
-<div id="novaListaModal" style="display:none;">
+<div id="novaListaModal" class="modal-style" style="display:none;">
     <form action="" method="post" id="formCriarLista">
         {% csrf_token %}
         <label for="nome_lista">Nome da Nova Lista:</label>
@@ -45,7 +47,35 @@
     <button onclick="fecharModal()">Cancelar</button>
 </div>
 
-<script>
+<div id="confirmAddModal" class="modal-style" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalConfirmacao()">&times;</span>
+        <p>Este produto já está na sua lista de desejos. Deseja adicionar novamente?</p>
+        <button onclick="confirmarAdicaoProduto()" class="btn btn-primary">Confirmar</button>
+        <button onclick="fecharModalConfirmacao()" class="btn btn-secondary">Cancelar</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.listaIdAtual = "{{ request.session.ultima_lista_id }}";
+    function verificarEAdicionarProduto(listaId, produtoId) {
+        console.log("Função chamada com listaId: " + listaId + ", produtoId: " + produtoId);
+        $.ajax({
+            url: '/verificar_produto_lista/' + produtoId + '/',
+            method: 'GET',
+            success: function(response) {
+                if (response.estaNaLista) {
+                    abrirModalConfirmacao(produtoId);
+                } else {
+                    window.location.href = '/adicionar/' + listaId + '/' + produtoId;
+                }
+            },
+            error: function(error) {
+                console.error('Erro ao verificar o produto na lista de desejos.');
+            }
+        });
+    }
+
     function abrirModal(produtoId) {
     var formCriarLista = document.getElementById('formCriarLista');
     var produtoIdInput = document.getElementById('produto_id_modal');
@@ -63,6 +93,35 @@
     function fecharModal() {
         document.getElementById('novaListaModal').style.display = 'none';
     }
+
+    function abrirModalConfirmacao(produtoId) {
+        window.produtoIdParaAdicionar = produtoId; // Armazena o ID para uso posterior
+        document.getElementById('confirmAddModal').style.display = 'block'; // Mostra o modal
+    }
+
+    function fecharModalConfirmacao() {
+        document.getElementById('confirmAddModal').style.display = 'none';
+    }
+
+    function confirmarAdicaoProduto() {
+        if (window.listaIdAtual && window.produtoIdParaAdicionar) {
+            $.ajax({
+                url: '/adicionar/' + window.listaIdAtual + '/' + window.produtoIdParaAdicionar,
+                method: 'GET',
+                success: function(response) {
+                    alert(response.message); 
+                    fecharModalConfirmacao();
+                },
+                error: function(error) {
+                    console.error('Erro ao adicionar o produto na lista de desejos:', error);
+                }
+            });
+        } else {
+            console.error('ID da lista ou do produto não está definido.');
+        }
+    }
+
+
 </script>
 
 

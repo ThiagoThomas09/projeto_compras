@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from . models import ListaDesejos, ItemListaDesejos
 from loja.models import Produto
@@ -76,10 +77,20 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
         if not created:
             item_lista.quantidade += 1
             item_lista.save()
-        
-        messages.success(request, 'Produto adicionado à lista de desejos com sucesso!')
+            response_message = 'Produto adicionado à lista de desejos com sucesso!'
+        else:
+            response_message = 'Produto adicionado à lista de desejos com sucesso!'
 
-        return redirect('/')
+        origem = request.GET.get('origem', 'default')
+
+        #Verifica se é uma requisição ajax
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'message': response_message})
+        else:
+            if origem == 'lista':
+                return redirect('wishlist')
+            else:
+                return redirect('/')
 
 def remover_da_lista_de_desejos(request, item_id):
     if request.user.is_authenticated:
@@ -90,3 +101,15 @@ def remover_da_lista_de_desejos(request, item_id):
         else:
             item.delete()
         return redirect('wishlist')
+    
+def verificar_produto_lista(request, produto_id):
+    if request.user.is_authenticated:
+        lista_id = request.session.get('ultima_lista_id')
+        if lista_id:
+            esta_na_lista = ItemListaDesejos.objects.filter(lista__id=lista_id, lista__user=request.user, produto__id=produto_id).exists()
+        else:
+            esta_na_lista = False
+
+        return JsonResponse({'estaNaLista': esta_na_lista})
+    else:
+        return JsonResponse({'error': 'Usuário não autenticado'}, status=401)
