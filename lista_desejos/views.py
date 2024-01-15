@@ -77,15 +77,14 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
         if not created:
             item_lista.quantidade += 1
             item_lista.save()
-            response_message = 'Produto adicionado à lista de desejos com sucesso!'
         else:
-            response_message = 'Produto adicionado à lista de desejos com sucesso!'
+            messages.success(request, 'Produto adicionado à lista de desejos com sucesso!')
 
         origem = request.GET.get('origem', 'default')
 
         #Verifica se é uma requisição ajax
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'status': 'success', 'message': response_message})
+            return JsonResponse({'status': 'success'})
         else:
             if origem == 'lista':
                 return redirect('wishlist')
