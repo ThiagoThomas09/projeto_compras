@@ -208,3 +208,15 @@ form p a{
     cursor: pointer;
     padding: 0;
 }
+
+/* --------------- */
+
+.nav-profile {
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.icon-conta {
+    font-size: 20px;
+    color: rgb(32, 32, 250);
+}

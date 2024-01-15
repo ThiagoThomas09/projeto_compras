@@ -1,11 +1,10 @@
 {% extends 'loja/main.html' %}
 
 {% block content %}
-<h1>Perfil do usuário</h1>
 <h2>{{ user }}</h2>
 
 <hr>
-<h3>Listas do usuário</h3>
+<h3>Listas criadas</h3>
 <br>
 {% for lista_info in lista_com_produtos %}
     <div class="box-element">

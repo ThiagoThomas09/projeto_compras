@@ -32,6 +32,7 @@
         </ul>
         <div class="form-inline my-2 my-lg-0">
           {% if request.user.is_authenticated %}
+          <i class="fa-solid fa-user icon-conta"></i>
           <a class="nav-profile" aria-current="page" href="{% url 'profiles' %}">Conta</a>
           <a href="{% url 'logout' %}" class="btn btn-warning">Sair</a>
           {% else %}
