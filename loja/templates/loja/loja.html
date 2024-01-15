@@ -42,9 +42,11 @@
         <input type="text" id="nome_lista" name="nome_lista" required>
 
         <input type="hidden" id="produto_id_modal" name="produto_id" value="">
-        <button type="submit">Criar Lista</button>
+        <div class="button-container">
+            <button type="submit" class="btn-primary">Criar Lista</button>
+            <button onclick="fecharModal()" class="btn-secondary">Cancelar</button>
+        </div>
     </form>
-    <button onclick="fecharModal()">Cancelar</button>
 </div>
 
 <div id="confirmAddModal" class="modal-style" style="display:none;">

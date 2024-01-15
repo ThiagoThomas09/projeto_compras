@@ -94,25 +94,117 @@
     width: 100px;
 }
 
-#novaListaModal {
+.modal-style {
     position: fixed;
-    top: 50%;
-    right: 50%;
-    bottom: 50%;
+    z-index: 1;
     left: 50%;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-#novaListaModal form {
-    background-color: #fff;
-    padding: 20px;
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#novaListaModal button {
+    margin: 5px;
+}
+
+.btn-primary {
+    border: 2px solid #f10e34;
+    background: #fff;
+    color: #f10e34;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: auto;
-    max-width: 500px;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.btn-secondary {
+    border: 2px solid #968789;
+    background: #fff;
+    color: #968789;
+    border-radius: 5px;
+    text-decoration: none;
+    padding: 5px;
+}
+
+#nome_lista {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 50%;
+}
+
+
+/* Login/Register */
+.form-box{
+    width: 90%;
+    max-width: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 50px 60px 70px;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-box h1 {
+    font-size: 30px;
+    margin-bottom: 30px;
+    color: rgb(224, 14, 14);
+    position: relative;
+}
+
+.input-field{
+    background: #eaeaea;
+    margin: 15px 0;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+
+input{
+    width: 100%;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    padding: 18px 15px;
+}
+
+.input-field i{
+    margin-left: 15px;
+    color: #999;
+}
+
+form p{
+    text-align: left;
+    font-size: 13px;
+}
+
+form p a{
+    text-decoration: none;
+    color: #f10e34;
+}
+
+.btn-field{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-field input[type="submit"]{
+    flex-basis: 48%;
+    background: #f10e34;
+    color: #fff;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }

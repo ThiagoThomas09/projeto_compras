@@ -3,25 +3,67 @@
 {% block content %}
 
 {% if page == 'register' %}
-<h1>Cadastro do usuario</h1>
 
-<form method="POST" action="{% url 'register' %}">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Cadastrar" />
-</form>
+<div class="container">
+    <div class="form-box">
+        <h1>Cadastro do usuário</h1>
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <div class="input-field">
+                    <i class="fa-solid fa-user"></i>
+                    {{ form.username }}
+                </div>
 
-<p>Já é cadastrado? <a href="{% url 'login' %}">Login</a></p>
+                <div class="input-field">
+                    <i class="fa-solid fa-envelope"></i>
+                    {{ form.email }}
+                </div>
+
+                <div class="input-field">
+                    <i class="fa-solid fa-lock"></i>
+                    {{ form.password1 }}
+                </div>
+
+                <div class="input-field">
+                    <i class="fa-solid fa-lock"></i>
+                    {{ form.password2 }}
+                </div>
+                <p>Já é cadastrado? <a href="{% url 'login' %}">Login</a></p>
+            </div>
+            <div class="btn-field">
+                <input type="submit" value="Registrar" />
+            </div>
+        </form>
+    </div>
+</div>
 
 {% else %}
-<form action="{% url 'login' %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username" />
-    <input type="password" name="password" placeholder="Digite sua senha" />
-    <input type="submit" name="Login" />
 
-    <p>Ainda não tem conta? <a href="{% url 'register' %}">Faça seu Cadastro</a></p>
-</form>
+<div class="container">
+    <div class="form-box">
+        <h1>Entre</h1>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <div class="input-field">
+                    <i class="fa-solid fa-user"></i>
+                    {{ form.username }}
+                </div>
+
+                <div class="input-field">
+                    <i class="fa-solid fa-lock"></i>
+                    {{ form.password }}
+                </div>
+
+                <p>Ainda não tem conta? <a href="{% url 'register' %}">Faça seu Cadastro</a></p>
+            </div>
+            <div class="btn-field">
+                <input type="submit" value="Entrar" />
+            </div>
+        </form>
+    </div>
+</div>
 {% endif %}
 
 

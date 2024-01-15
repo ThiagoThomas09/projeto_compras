@@ -24,7 +24,7 @@
             <form method="post" action="{% url 'criar_lista' %}">
                 {% csrf_token %}
                 <input type="text" name="nome_lista" placeholder="Nome da nova lista">
-                <button type="submit">Criar Lista</button>
+                <button type="submit" class="btn-primary">Criar Lista</button>
             </form>
             
 

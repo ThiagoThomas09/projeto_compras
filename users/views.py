@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from . forms import CustomUserCreationForm
+from . forms import CustomUserCreationForm, CustomAuthenticationForm
 from lista_desejos.models import ListaDesejos, ItemListaDesejos
 from loja.models import Produto
 
@@ -30,6 +30,7 @@ def login_user(request):
     if request.user.is_authenticated:
         return redirect('/')
 
+    form = CustomAuthenticationForm()
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -50,7 +51,7 @@ def login_user(request):
         else:
             messages.error(request, 'Usuário ou senha está incorreto')
 
-    return render(request, 'users/login_register.html')
+    return render(request, 'users/login_register.html', {'form': form})
 
 def logout_user(request):
     # Delete a session do usuário
