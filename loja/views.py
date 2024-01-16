@@ -8,7 +8,6 @@ def loja(request):
     lista_selecionada = None
 
     if request.user.is_authenticated:
-        total_quantidade = ListaDesejos.get_total_quantidade(request.user)
         lista_selecionada_id = request.session.get('ultima_lista_id')
 
         # Obter o ID da lista selecionada
@@ -17,6 +16,9 @@ def loja(request):
         else:
             listas = ListaDesejos.objects.filter(user=request.user)
             lista_selecionada = listas.first() if listas.exists() else None
+        
+        if lista_selecionada:
+            total_quantidade = sum(item.quantidade for item in lista_selecionada.itens.all())
 
     context = {'produtos': produtos,
                'total_quantidade': total_quantidade,
