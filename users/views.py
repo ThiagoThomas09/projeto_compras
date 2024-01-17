@@ -12,14 +12,26 @@ def profiles(request):
 
     user = request.user
     listas = ListaDesejos.objects.filter(user=user)
+    total_qtd_all_lists = 0
+    total_quantidade = 0
+    lista_selecionada_id = request.session.get('ultima_lista_id')
+
+    if lista_selecionada_id:
+        lista_selecionada = ListaDesejos.objects.filter(id=lista_selecionada_id, user=user).first()
+        if lista_selecionada:
+            total_quantidade = sum(item.quantidade for item in lista_selecionada.itens.all())
+
 
     lista_com_produtos = []
     for lista in listas:
         itens = ItemListaDesejos.objects.filter(lista=lista)
+        total_qtd_all_lists += sum(item.quantidade for item in itens)
         lista_com_produtos.append({'lista': lista, 'itens': itens})
 
     context = {
-        'lista_com_produtos': lista_com_produtos
+        'lista_com_produtos': lista_com_produtos,
+        'total_qtd_all_lists': total_qtd_all_lists,
+        'total_quantidade': total_quantidade
     }
     return render(request, 'users/perfil.html', context)
 
