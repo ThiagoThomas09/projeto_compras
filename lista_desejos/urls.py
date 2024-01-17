@@ -12,5 +12,6 @@ urlpatterns = [
     path('remover/<int:item_id>/', views.remover_da_lista_de_desejos, name='remover_da_lista'),
 
     path('verificar_produto_lista/<int:produto_id>/', views.verificar_produto_lista, name='verificar_produto_lista'),
+    path('deletar_lista/<int:lista_id>/', views.deletar_lista_desejos, name='deletar_lista')
 
 ]

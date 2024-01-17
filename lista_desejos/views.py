@@ -77,6 +77,7 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
         if not created:
             item_lista.quantidade += 1
             item_lista.save()
+            response_message = 'Produto adicionado à lista de desejos com sucesso!'
         else:
             messages.success(request, 'Produto adicionado à lista de desejos com sucesso!')
 
@@ -84,7 +85,7 @@ def adicionar_a_lista_de_desejos(request, produto_id, lista_id):
 
         #Verifica se é uma requisição ajax
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'status': 'success'})
+            return JsonResponse({'status': 'success', 'message': response_message})
         else:
             if origem == 'lista':
                 return redirect('wishlist')
@@ -112,3 +113,24 @@ def verificar_produto_lista(request, produto_id):
         return JsonResponse({'estaNaLista': esta_na_lista})
     else:
         return JsonResponse({'error': 'Usuário não autenticado'}, status=401)
+    
+def deletar_lista_desejos(request, lista_id):
+    user = request.user
+    lista = get_object_or_404(ListaDesejos, id=lista_id, user=user)
+
+    lista_selecionada_id = request.session.get('ultima_lista_id')
+    # Verifica se o ID da lista é o mesmo da lista armazenada na sessão
+    if lista_id == lista_selecionada_id:
+        lista.delete()
+        listas = ListaDesejos.objects.filter(user=user)
+        if listas.exists():
+            request.session['ultima_lista_id'] = listas.last().id
+            # Se ainda existir outras listas atualiza a sessao para o útlimo id da lista
+        else:
+            del request.session['ultima_lista_id']
+            # Se n existir mais listas, remove da sessão o id da lista
+    else:
+        lista.delete()
+        # Deleta a lista caso n esteja selecionada, por ex: deletar pela URL
+
+    return redirect('wishlist')

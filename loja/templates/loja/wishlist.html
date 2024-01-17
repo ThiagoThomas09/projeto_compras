@@ -40,7 +40,11 @@
         <br>
         {% if lista_selecionada %}
         <div class="box-element">
-            <h3>{{ lista_selecionada.nome }}</h3>
+            <h3 class="list-header">{{ lista_selecionada.nome }}</h3>
+            <a href="{% url 'deletar_lista' lista_selecionada.id %}" title="Deletar Lista">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+            
             <div class="list-row">
                 <div style="flex:1; text-align: center">Produto</div>
                 <div style="flex:1; text-align: center">Loja</div>

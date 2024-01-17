@@ -220,3 +220,14 @@ form p a{
     font-size: 20px;
     color: rgb(32, 32, 250);
 }
+
+.list-header {
+    display: inline-block;
+}
+
+.fa-trash {
+    margin-left: 5px;
+    font-size: 20px;
+    color: #f10e34;
+
+}
