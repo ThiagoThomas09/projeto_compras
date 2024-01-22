@@ -1,0 +1,64 @@
+{% extends 'loja/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'loja' %}"><i class="fa-solid fa-arrow-left btn-voltar"></i></a>
+
+            <br>
+            <br>
+            <h3>Carrinho de Compras</h3>
+
+            <table class="table">
+                <tr>
+                    <th><h5>Itens: <strong>{{ itens_carrinho }}</strong></h5></th>
+                    <th><h5>Total: <strong>R$ {{ total_carrinho|floatformat:2 }}</strong></h5></th>
+                    <th>
+                        <a class="btn btn-success btn-checkout" href="{% url 'checkout' %}">Finalizar Compra</a>
+                    </th>
+                    <hr>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+        <div class="box-element">
+            
+            <div class="list-row">
+                <div style="flex:1; text-align: center">Produto</div>
+                <div style="flex:1; text-align: center">Loja</div>
+                <div style="flex:2; text-align: center">Item</div>
+                <div style="flex:1; text-align: center">Preço</div>
+                <div style="flex:1; text-align: center;">Quantidade</div>
+                <div style="flex:1; text-align: center;">Total</div>
+            </div>
+
+            {% for item in carrinho.cart_items.all %}
+            <div class="list-row">
+                <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.imageURL }}"></div>
+                <div style="flex:1; text-align: center"><img class="row-image" src="{{ item.produto.loja.imageURL }}"></div>
+                <div style="flex:2; text-align: center">{{ item.produto.nome }}</div>
+                <div style="flex:1; text-align: center">R$ {{ item.produto.preco|floatformat:2 }}</div>
+                <div style="flex:1">
+                    
+                    <div class="quantidade">
+                        <a class="muda-quantidade" href="{% url 'adicionar_ao_carrinho' item.produto.id %}">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </a>
+                        <p class="quantidade">{{ item.quantidade }}</p>
+                        <a class="muda-quantidade" href="{% url 'remover_do_carrinho' item.id %}">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                    </div>
+                </div>
+                <div style="flex:1; text-align: center;">R$ {{item.get_total}}</div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

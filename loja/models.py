@@ -34,3 +34,29 @@ class Produto(models.Model):
             url = 'static/images/default.jpg'
         return url
 
+class Carrinho(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    status_aberto = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Carrinhos de Compras"
+
+    def __str__(self):
+        return f"Carrinho de {self.user.username}"
+
+    @property
+    def get_total(self):
+        return sum(item.get_total for item in self.cart_items.all())
+
+class ItemCarrinho(models.Model):
+    carrinho = models.ForeignKey(Carrinho, related_name='cart_items', on_delete=models.CASCADE)
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    quantidade = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantidade} de {self.produto.nome}"
+
+    @property
+    def get_total(self):
+        return self.produto.preco * self.quantidade

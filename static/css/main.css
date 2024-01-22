@@ -9,6 +9,18 @@
     margin-left: 10px;
 }
 
+.icon-cart {
+    font-size: 42px !important;
+}
+
+#cart-icon {
+    position: relative;
+    display: inline-block;
+    top: 10px;
+    margin-left: 10px;
+}
+
+
 #total-list-items {
     position: absolute;
     top: 0;
@@ -231,3 +243,36 @@ form p a{
     color: #f10e34;
 
 }
+
+.btn-checkout {
+    float: right;
+    margin: 5px;
+}
+
+.btn-confirmation {
+    background-color: green; /* Cor de fundo verde */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    padding: 10px 20px; /* Algum padding */
+    border-radius: 5px; /* Borda arredondada */
+    cursor: pointer; /* Cursor de mão quando passar o mouse */
+}
+
+.btn-confirmation:hover {
+    background-color: darkgreen; /* Cor de fundo um pouco mais escura quando passar o mouse */
+}
+
+.total-carrinho-container {
+    display: flex;
+}
+
+.total-carrinho-quantidade {
+    flex: 1;
+}
+
+.total-carrinho {
+    margin-left: auto;
+    text-align: right;
+    flex: 1;
+}
+

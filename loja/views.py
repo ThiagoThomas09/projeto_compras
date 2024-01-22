@@ -1,5 +1,5 @@
-from django.shortcuts import get_object_or_404, render
-from . models import Produto
+from django.shortcuts import get_object_or_404, render, redirect
+from . models import Produto, Carrinho, ItemCarrinho
 from lista_desejos.models import ListaDesejos
 
 def loja(request):
@@ -24,3 +24,76 @@ def loja(request):
                'total_quantidade': total_quantidade,
                'lista_selecionada': lista_selecionada}
     return render(request, 'loja/loja.html', context)
+
+def cart(request):
+    if request.user.is_authenticated:
+        carrinho, created = Carrinho.objects.get_or_create(user=request.user, status_aberto=True)
+        itens = carrinho.cart_items.all()
+
+        total_carrinho = sum(item.get_total for item in itens)
+        itens_carrinho = sum(item.quantidade for item in itens)
+
+        context = {
+        'carrinho': carrinho,
+        'itens_carrinho': itens_carrinho,
+        'total_carrinho': total_carrinho,
+        }
+
+        return render(request, 'loja/cart.html', context)
+    else:
+        return redirect('login')
+
+    
+
+def adicionar_ao_carrinho(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    carrinho, created = Carrinho.objects.get_or_create(user=request.user, status_aberto=True)
+    item, created = ItemCarrinho.objects.get_or_create(carrinho=carrinho, produto=produto)
+
+    if not created:
+        item.quantidade += 1
+        item.save()
+    
+    return redirect('cart')
+
+def remover_do_carrinho(request, item_id):
+    item = get_object_or_404(ItemCarrinho, id=item_id, carrinho__user=request.user)
+    if item.quantidade > 1:
+        item.quantidade -= 1
+        item.save()
+    else:
+        item.delete()
+    return redirect('cart')
+
+def checkout(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    try:
+        carrinho = Carrinho.objects.get(user=request.user, status_aberto=True)
+        if not carrinho.cart_items.exists():
+            return redirect('loja')
+        
+        total_itens_cart = sum(item.quantidade for item in carrinho.cart_items.all())
+
+        return render(request, 'loja/checkout.html', {'carrinho': carrinho, 'total_itens_cart': total_itens_cart})
+    except Carrinho.DoesNotExist:
+        return redirect('loja')
+
+def confirmar_pedido(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    try:
+        carrinho = Carrinho.objects.get(user=request.user, status_aberto=True)
+        if not carrinho.cart_items.exists():
+            return redirect('loja')
+
+        # Fecha o carrinho
+        carrinho.status_aberto = False
+        carrinho.save()
+
+        return redirect('profiles')
+    except Carrinho.DoesNotExist:
+        return redirect('loja')
+

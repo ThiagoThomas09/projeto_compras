@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 <div class="row">
-    <div>Lista selecionada ID: {{ lista_selecionada.id }}</div>
     {% for produto in produtos %}
         <div class="col-lg-4">
             <img src="{{produto.imageURL}}" class="center-image">
@@ -27,6 +26,17 @@
                         <i class="fa fa-heart"></i> Favoritos
                     </a>
                 {% endif %}
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'adicionar_ao_carrinho' produto.id %}" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> Carrinho
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> Carrinho
+                    </a>
+                {% endif %}
+
                 
                 <h4 class="preco-direita">R$ {{produto.preco|floatformat:2}}</h4>
             </div>
