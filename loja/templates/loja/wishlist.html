@@ -44,6 +44,10 @@
             <a href="{% url 'deletar_lista' lista_selecionada.id %}" title="Deletar Lista">
                 <i class="fa-solid fa-trash"></i>
             </a>
+            <br>
+            <a href="{% url 'adicionar_lista_ao_carrinho' lista_selecionada.id %}" class="btn btn-primary" title="Adicionar Lista ao Carrinho">
+                Adicionar Lista ao Carrinho
+            </a>
             
             <div class="list-row">
                 <div style="flex:1; text-align: center">Produto</div>

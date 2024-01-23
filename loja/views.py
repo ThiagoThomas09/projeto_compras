@@ -5,6 +5,7 @@ from lista_desejos.models import ListaDesejos
 from datetime import timedelta
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.contrib import messages
 
 def loja(request):
     produtos = Produto.objects.all()
@@ -120,4 +121,29 @@ def verificar_carrinhos_abertos():
     
     for carrinho in carrinhos_abertos:
         enviar_email_carrinho_aberto(carrinho.user.email, carrinho)
+
+
+def adicionar_lista_ao_carrinho(request, lista_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    lista = get_object_or_404(ListaDesejos, id=lista_id, user=request.user)
+    itens_lista = lista.itens.all()
+
+    carrinho, created = Carrinho.objects.get_or_create(user=request.user, status_aberto=True)
+
+    for item in itens_lista:
+        item_carrinho, item_created = ItemCarrinho.objects.get_or_create(
+            carrinho=carrinho, 
+            produto=item.produto,
+            defaults={'quantidade': item.quantidade}
+        )
+
+        if not item_created:
+            item_carrinho.quantidade += item.quantidade
+            item_carrinho.save()
+
+    messages.success(request, 'Itens da lista de desejos adicionados ao carrinho com sucesso!')
+    return redirect('cart')
+
 
