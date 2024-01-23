@@ -1,6 +1,10 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from . models import Produto, Carrinho, ItemCarrinho
 from lista_desejos.models import ListaDesejos
+from datetime import timedelta
+from django.utils import timezone
+from django.core.mail import send_mail
 
 def loja(request):
     produtos = Produto.objects.all()
@@ -96,4 +100,24 @@ def confirmar_pedido(request):
         return redirect('profiles')
     except Carrinho.DoesNotExist:
         return redirect('loja')
+    
+def enviar_email_carrinho_aberto(user_email, carrinho):
+    subject = 'Você tem um carrinho aberto!'
+    message = f'Olá, percebemos que você ainda tem itens no seu carrinho. Não perca os produtos que você selecionou!'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [user_email,]
+    send_mail(subject, message, email_from, recipient_list)
+    carrinho.email_enviado = True
+    carrinho.save()
+
+def verificar_carrinhos_abertos():
+    data_limite = timezone.now() - timedelta(minutes=1)
+    carrinhos_abertos = Carrinho.objects.filter(
+        status_aberto=True, 
+        criado_em__lt=data_limite,
+        email_enviado=False
+    )
+    
+    for carrinho in carrinhos_abertos:
+        enviar_email_carrinho_aberto(carrinho.user.email, carrinho)
 

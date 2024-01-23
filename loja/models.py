@@ -38,6 +38,7 @@ class Carrinho(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     criado_em = models.DateTimeField(auto_now_add=True)
     status_aberto = models.BooleanField(default=True)
+    email_enviado = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Carrinhos de Compras"
