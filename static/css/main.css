@@ -276,3 +276,12 @@ form p a{
     flex: 1;
 }
 
+.error-message {
+    color: red;
+}
+
+.help-text-password {
+    text-align: left;
+    width: 95%;
+}
+

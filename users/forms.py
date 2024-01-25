@@ -1,21 +1,21 @@
 from django import forms
-from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
 class CustomUserCreationForm(UserCreationForm):
 
     password1 = forms.CharField(
-    label="Senha",
-    strip=False,
-    widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}),
+        label="Senha",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Senha'}),
+        help_text="A senha deve ter pelo menos 8 caracteres (letras, números e caracteres especiais)"
     )
 
     password2 = forms.CharField(
-    label="Confirmação da senha",
-    strip=False,
-    widget=forms.PasswordInput(attrs={'placeholder': 'Confirme sua senha'}),
-)
+        label="Confirmação da senha",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirme sua senha'}),
+    )
     
     
     class Meta:
